@@ -14,26 +14,26 @@ import java.util.Locale;
  */
 public class MeetingDate {
 
-    public static final String MESSAGE_CONSTRAINTS = "Date should be in the form of dd MMM yyyy";
+    public static final String MESSAGE_CONSTRAINTS = "Date should be in the form of dd MMM yyyy [HH:mm]\nExample: 12 Nov 2022 or 12 Nov 2022 16:30";
 
     public final String meetingDate;
 
     /**
-     * Constructs a {@code Date}. Meeting date can be null
+     * Constructs a {@code DateTime}. Meeting date and time can be null
      *
-     * @param date A valid date.
+     * @param dateTime A valid date or dateTime.
      */
-    public MeetingDate(String date) {
-        if (date != null && !date.isEmpty()) {
-            checkArgument(isValidMeetingDate(date), MESSAGE_CONSTRAINTS);
+    public MeetingDate(String dateTime) {
+        if (dateTime != null && !dateTime.isEmpty()) {
+            checkArgument(isValidMeetingDate(dateTime), MESSAGE_CONSTRAINTS);
         }
-        this.meetingDate = date;
+        this.meetingDate = dateTime;
 
     }
 
     /**
-     * Returns true if a given string is a valid date.
-     * Checks if date is valid by parsing string to LocalDate
+     * Returns true if a given string is a valid date or dateTime.
+     * Checks if date or dateTime is valid by parsing string to LocalDate or LocalDateTime
      */
     public static boolean isValidMeetingDate(String test) {
         if (test != null && !test.isEmpty()) {
