@@ -2,7 +2,7 @@ package seedu.address.model.meeting;
 
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
@@ -36,9 +36,14 @@ public class MeetingDate {
      */
     public static boolean isValidMeetingDate(String test) {
         if (test != null && !test.isEmpty()) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM yyyy", Locale.ENGLISH);
+            System.out.println("here");
+            System.out.println(test);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm", Locale.ENGLISH);
+            System.out.println("here");
             try {
-                LocalDate.parse(test, formatter);
+                System.out.println("here");
+                LocalDateTime.parse(test, formatter);
+                System.out.println("here");
             } catch (Exception ex) {
                 return false;
             }
