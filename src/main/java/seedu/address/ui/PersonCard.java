@@ -57,8 +57,8 @@ public class PersonCard extends UiPart<Region> {
         address.setText(person.getAddress().value);
         email.setText(person.getEmail().value);
         income.setText(person.getIncome().value);
-        if (person.getMeetingDate().value != null && person.getMeetingDate().value != "") {
-            meetingDate.setText(person.getMeetingDate().value);
+        if (person.getMeetingDate().meetingDate != null && person.getMeetingDate().meetingDate != "") {
+            meetingDate.setText(person.getMeetingDate().meetingDate);
         } else {
             meetingDate.setText("TBC");
         }
