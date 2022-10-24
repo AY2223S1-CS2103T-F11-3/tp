@@ -2,8 +2,8 @@ package seedu.address.model.meeting;
 
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
-import java.time.LocalDateTime;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
@@ -14,7 +14,8 @@ import java.util.Locale;
  */
 public class MeetingDate {
 
-    public static final String MESSAGE_CONSTRAINTS = "Date should be in the form of dd MMM yyyy [HH:mm]\nExample: 12 Nov 2022 or 12 Nov 2022 16:30";
+    public static final String MESSAGE_CONSTRAINTS = "Date should be in the form of dd MMM yyyy [HH:mm]\n"
+            + "Example: 12 Nov 2022 or 12 Nov 2022 16:30";
 
     public final String meetingDate;
 
