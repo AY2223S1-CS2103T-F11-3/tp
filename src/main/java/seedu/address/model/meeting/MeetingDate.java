@@ -17,7 +17,7 @@ public class MeetingDate {
     public static final String MESSAGE_CONSTRAINTS = "Date should be in the form of dd MMM yyyy [HH:mm]\n"
             + "Example: 12 Nov 2022 or 12 Nov 2022 16:30";
 
-    public final String meetingDate;
+    public final String value;
 
     /**
      * Constructs a {@code DateTime}. Meeting date and time can be null
@@ -28,7 +28,7 @@ public class MeetingDate {
         if (dateTime != null && !dateTime.isEmpty()) {
             checkArgument(isValidMeetingDate(dateTime), MESSAGE_CONSTRAINTS);
         }
-        this.meetingDate = dateTime;
+        this.value = dateTime;
 
     }
 
@@ -58,19 +58,19 @@ public class MeetingDate {
     public boolean equals(Object other) {
         return other == this // short circuit if same object
                 || (other instanceof MeetingDate // instanceof handles nulls
-                && (meetingDate != null && meetingDate.equals(((MeetingDate) other).meetingDate))); // state check
+                && (value != null && value.equals(((MeetingDate) other).value))); // state check
     }
 
     @Override
     public int hashCode() {
-        return meetingDate.hashCode();
+        return value.hashCode();
     }
 
     /**
      * Format state as text for viewing.
      */
     public String toString() {
-        return meetingDate;
+        return value;
     }
 
 }
