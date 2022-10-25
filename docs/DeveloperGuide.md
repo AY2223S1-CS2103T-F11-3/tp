@@ -3,8 +3,32 @@ layout: page
 title: Developer Guide
 ---
 
-* Table of Contents
-  {:toc}
+Table of Contents
+
+- [Acknowledgements](#acknowledgements)
+- [Setting up, getting started](#setting-up-getting-started)
+- [Design](#design)
+    * [Architecture](#architecture)
+    * [UI component](#ui-component)
+    * [Logic component](#logic-component)
+    * [Model component](#model-component)
+    * [Storage component](#storage-component)
+    * [Common classes](#common-classes)
+- [Implementation](#implementation)
+    * [Import command](#import-command)
+    * [\[Proposed\] Undo/redo feature](#proposed-undoredo-feature)
+    * [\[Proposed\] Data archiving](#proposed-data-archiving)
+- [Documentation, logging, testing, configuration, dev-ops](#documentation-logging-testing-configuration-dev-ops)
+- [Appendix: Requirements](#appendix-requirements)
+    * [Product scope](#product-scope)
+    * [User stories](#user-stories)
+    * [Use cases](#use-cases)
+    * [Non-Functional Requirements](#non-functional-requirements)
+    * [Glossary](#glossary)
+- [Appendix: Instructions for manual testing](#appendix-instructions-for-manual-testing)
+    * [Launch and shutdown](#launch-and-shutdown)
+    * [Deleting a client](#deleting-a-client)
+    * [Saving data](#saving-data)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -193,6 +217,38 @@ Classes used by multiple components are in the `seedu.addressbook.commons` packa
 
 This section describes some noteworthy details on how certain features are implemented.
 
+### Import command
+
+#### Current Implementation
+
+The import command mainly relies on the following classes:
+
+* `ImportCommand`
+* `AddressBookParser`
+* `ImportCommandParser`
+* `ParserUtil`
+* `CsvAdaptedPerson`
+* `StringToTag`
+
+`CsvToBeanBuilder` is provided by the OpenCSV library.
+
+1. The user executes the `import` command while providing a path as an argument.
+2. `AddressBookParser#parseCommand()` is called, which creates and returns a new `ImportCommandParser` that parses the provided path.
+3. `ImportCommandParser#parse()` is called, which calls `ParserUtil#parseImportPath()` to parse the provided path.
+4. `ParserUtil` checks if the path is to a `JSON` or `CSV` file, and if the file is readable. If the path is valid, it returns the path.
+5. `ImportCommandParser` creates and returns a new `ImportCommand` using the returned path.
+6. `ImportCommand#execute()` is called.
+    * If the path is to a `JSON` file, `ImportCommand` creates a new `JsonAddressBookStorage` using the path, then uses it to read and add `Person`s to the `Model`.
+    * If the path is to a `CSV` file, `ImportCommand` creates a new `CsvToBeanBuilder` using the path, then uses it to obtain a list of `CsvAdaptedPerson`s. `StringToTag#convertToRead()` is called by `CsvToBeanBuilder` to convert strings from the `CSV` file to `Tag`s. `CsvAdaptedPerson#toModelType()` is called to convert each `CsvAdaptedPerson` to a `Person` before adding them to the `Model`.
+
+The following sequence diagram shows how the import command works:
+
+![ImportSequenceDiagram](images/ImportSequenceDiagram.png)
+
+#### Design considerations:
+
+Chose to use OpenCSV to read `CSV` files to avoid reinventing the wheel.
+
 ### \[Proposed\] Undo/redo feature
 
 #### Proposed Implementation
@@ -327,6 +383,7 @@ _{Explain here how the data archiving feature will be implemented}_
 * should only be used to access and store sensitive information
 * targeted at FAs and does not include features that involve communication with their clients
 * manage contacts faster than a typical mouse/GUI driven app
+* FA's can shorten their time spent on doing administrative duties such as finding a client by showing all clients' details as well as portfolio in one glance
 
 ### User stories
 
@@ -334,25 +391,25 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 | Priority | As a …                                     | I can …                                                                          | So that …                                                                           |
 |----------|--------------------------------------------|----------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|
-| `* * *`  | relatively new user                        | add a new contact                                                                | I wont forget my new client's details                                               |
-| `* * *`  | relatively new user                        | delete meeting dates for a contact                                               | I can maintain an updated list of my clients’ details                               |
+| `* * *`  | relatively new user                        | add a new client                                                                 | I wont forget my new client's details                                               |
+| `* * *`  | relatively new user                        | delete meeting dates for a client                                                | I can maintain an updated list of my clients’ details                               |
 | `* * *`  | relatively new user                        | click a button                                                                   | I can exit the program easily                                                       |
 | `* * *`  | relatively new user                        | save my clients' data                                                            | the data will not be lost after I close the application                             |
-| `* * *`  | relatively new user                        | update meeting dates for a contact                                               | I can maintain an updated list of my clients’ details                               |
-| `* * *`  | relatively new user                        | read updated meeting dates for a contact                                         | I can always know an updated list of my clients’ details                            |
-| `* * *`  | relatively new user                        | list all contacts                                                                | I will be able to find and view all my clients easily                               |
-| `* * *`  | relatively new user                        | view email addresses as part of contact information                              | it would be easier for me to contact the respective client                          |
+| `* * *`  | relatively new user                        | update meeting dates for a client                                                | I can maintain an updated list of my clients’ details                               |
+| `* * *`  | relatively new user                        | read updated meeting dates for a client                                          | I can always know an updated list of my clients’ details                            |
+| `* * *`  | relatively new user                        | list all clients                                                                 | I will be able to find and view all my clients easily                               |
+| `* * *`  | relatively new user                        | view email addresses as part of client information                               | it would be easier for me to contact the respective client                          |
 | `* *`    | user ready to start using the app          | import a set of data from another source                                         | I do not have to insert each client’s data one by one                               |
-| `* *`    | user who is a little familiar with the app | search for contacts                                                              | I do not have to scroll through all of my clients’ details to find a certain client |
+| `* *`    | user who is a little familiar with the app | search for clients                                                               | I do not have to scroll through all of my clients’ details to find a certain client |
 | `*`      | user who is a little familiar with the app | sort meetings                                                                    | I can plan for the upcoming days                                                    |
 | `*`      | user ready to start using the app          | purge all current data                                                           | I can get rid of sample/experimental data I used for exploring the app              |
 | `*`      | user ready to start using the app          | view a list of instructions or commands built in by the app for easier reference | it would be easier for me to adapt to these commands                                |
 | `*`      | user ready to start using the app          | be asked to set up a password                                                    | I don’t forget it later                                                             |
-| `*`      | user who is familiar with the app          | sort my contacts into groups                                                     | I can keep them organised                                                           |
+| `*`      | user who is familiar with the app          | sort my clients into groups                                                      | I can keep them organised                                                           |
 | `*`      | user who is familiar with the app          | copy data to the clipboard with the click of a button or the use of a shortcut   | it is more convenient for me                                                        |
 | `*`      | new user                                   | choose to use a generated password                                               | I can avoid using an insecure password                                              |
 | `*`      | new user                                   | lock the application                                                             | unauthorised parties cannot access my data                                          |
-| `*`      | long-time user                             | view the dashboard as an overview for all contacts                               | I can view the overall details of all my clients                                    |
+| `*`      | long-time user                             | view the dashboard as an overview for all clients                                | I can view the overall details of all my clients                                    |
 | `*`      | long-time user                             | archive/hide unused data                                                         | I am not distracted by irrelevant data                                              |
 | `*`      | long-time user                             | archive/hide unused data                                                         | I am not distracted by irrelevant data                                              |
 | `*`      | long-time user                             | delete multiple “old” clients                                                    | I can easily identify clients I am still working with                               |
@@ -486,7 +543,7 @@ Use case ends.
 
 **Use case: UC 7 - Import external data**
 
-**Precondition:** Actor exported data from Google contacts as Google CSV
+**Precondition:** Actor has a valid file
 
 **MSS:**
 
@@ -599,20 +656,29 @@ testers are expected to do more *exploratory* testing.
 
 1. _{ more test cases …​ }_
 
-### Deleting a person
+### Deleting a client
 
-1. Deleting a person while all persons are being shown
+1. Deleting a client while all client are being shown
 
-    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+    1. Prerequisites: List all client using the `list` command. Multiple client in the list.
 
-    1. Test case: `delete 1`<br>
-       Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message.
+    2. Test case: `delete 1`<br>
+       Expected: First client is deleted from the list. Details of the deleted client shown in the status message.
        Timestamp in the status bar is updated.
 
-    1. Test case: `delete 0`<br>
+    3. Test case: `delete 1,2,5`<br>
+       Expected: Client at index 1,2 and 5 is deleted form the list. Details of the deleted client shown
+       in the status message.
+
+    4. Test case: `delete 1-3`<br>
+       Expected: Client at index 1,2 and 3 is deleted form the list. Details of the deleted client shown
+       in the status message.
+
+    5. Test case: `delete 0`<br>
        Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
 
-    1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
+    6. Other incorrect delete commands to try: `delete`, `delete x`, `delete 2-1`, `...` (where x is larger
+       than the list size)<br>
        Expected: Similar to previous.
 
 1. _{ more test cases …​ }_
@@ -621,6 +687,19 @@ testers are expected to do more *exploratory* testing.
 
 1. Dealing with missing/corrupted data files
 
-    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+    1. Test case: Importing an invalid JSON file
+       Expected: list of clients will be empty and nothing is shown
+
+    2. Test case: Importing an invalid CSV file
+       Expected: list of clients will be empty and nothing is shown
+
+    3. Test case: Editing the JSON file when the application is not launched with invalid datas
+       Expected: list of clients will be empty and nothing is shown
+
+    4. Test case: Missing JSON file
+       Expected: Creates a new addressbook.json file when there is a new command entered
+
+    5. {explain how to simulate a missing/corrupted file, and the expected behavior}_
+
 
 1. _{ more test cases …​ }_

@@ -7,22 +7,26 @@ FinBook is a desktop app for managing clients, optimized for use via a Command L
 the benefits of a Graphical User Interface (GUI). If you can type fast, FinBook can get your contact management tasks
 done faster and more securely than traditional GUI apps.
 
-* Table of Contents
-  {:toc}
-
---------------------------------------------------------------------------------------------------------------------
-
+## Table of Contents
 - [Quick Start](#quick-start)
 - [Features](#features)
     * [Adding a client: `add`](#adding-a-client-add)
     * [Editing a client: `edit`](#editing-a-client--edit)
     * [Deleting a client: `delete`](#deleting-a-client--delete)
+    * [Copying a client's data: `copy`](#copying-a-clients-data--copy)
     * [Listing all clients: `list`](#listing-all-clients-list)
     * [Exiting the application: `exit`](#exiting-the-application--exit)
     * [Saving the data](#saving-the-data)
     * [Importing data: `import`](#importing-data--import)
+    * [Exporting data: `export`](#exporting-data--export)
+    * [Locking the application: `lock`](#locking-the-application--lock)
+    * [Setting or updating the password: `password`](#setting-or-updating-the-password--password)
+    * [Changing Light/Dark mode](#changing-lightdark-mode)
+
 - [FAQ](#faq)
 - [Command Summary](#command-summary)
+
+--------------------------------------------------------------------------------------------------------------------
 
 ## Quick start
 
@@ -89,12 +93,16 @@ done faster and more securely than traditional GUI apps.
 
 Adds a client to the FinBook.
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS i/MONTHLY_INCOME m/UPCOMING_MEETING_DATES​`
+Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS i/MONTHLY_INCOME m/UPCOMING_MEETING_DATES
+t/TAGS r/RISK_LEVEL pl/CURRENT_PLANS​`
+​`
 
 Examples:
 
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 i/$100000 m/12 Jan 2022`
-* `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/ABC street p/1234567 i/$10 m/23 Feb 2022 16:30`
+* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 i/$100000 m/12-Jan-2022 t/VIPClient
+  r/high pl/Prudential Health`
+* `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/ABC street p/1234567 i/$10 m/23-Feb-2022 16:30 r/low
+  pl/NTUC Income Plan`
 
 ---
 
@@ -110,7 +118,8 @@ Format: `list`
 
 Edits an existing client in the FinBook.
 
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [i/MONTHLY_INCOME] [m/UPCOMING_MEETING_DATES]…​`
+Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [i/MONTHLY_INCOME] [m/UPCOMING_MEETING_DATES]
+[t/TAGS] [r/RISK_LEVEL] [pl/CURRENT_PLANS]​`
 
 * Edits the client at the specified `INDEX`. The index refers to the index number shown in the displayed client list.
   The index **must be a positive integer** 1, 2, 3, …​
@@ -125,20 +134,84 @@ Examples:
 
 ---
 
-### Deleting a person : `delete`
+### Deleting a client : `delete`
+
+Four formats of deleting a client.
+
+1. `delete INDEX`
+2. `delete INDEX1, INDEX2, …`
+3. `delete STARTINDEX - ENDINDEX`
+4. `delete all`
+
+* The index refers to the index number shown in the displayed client list.
+* The index **must be a positive integer** 1, 2, 3, …​
+
+#### Deleting a single client
 
 Deletes the specified client from the FinBook.
 
 Format: `delete INDEX`
 
 * Deletes the client at the specified `INDEX`.
-* The index refers to the index number shown in the displayed client list.
-* The index **must be a positive integer** 1, 2, 3, …​
 
 Examples:
 
 * `list` followed by `delete 2` deletes the 2nd client in the FinBook.
 * `find Betsy` followed by `delete 1` deletes the 1st client in the results of the `find` command.
+
+#### Deleting multiple clients
+
+Deletes multiple specified clients from the FinBook.
+
+Format: `delete INDEX1, INDEX2, …`
+
+* Deletes the client at the specified `INDEX1`, `INDEX2`, and so on.
+* Value of `INDEX1`, `INDEX2`, … cannot contain any repeated values.
+
+Examples:
+
+* `list` followed by `delete 1, 2, 5` deletes the 1st, 2nd and 5th client in the FinBook.
+
+Deletes a range of clients from the FinBook.
+
+Format: `delete STARTINDEDX - ENDINDEX`
+
+* Deletes the client from `STARTINDEX` to `ENDINDEX` inclusive.
+* Value of`STARTINDEX` must be smaller than `ENDINDEX`.
+
+Examples:
+
+* `list` followed by `delete 1-3` deletes the 1st, 2nd and 3rd client in the FinBook.
+
+Deletes all clients from the FinBook.
+
+Format: `delete all`
+
+* Deletes all clients in FinBook.
+
+Examples:
+
+* `list` followed by `delete all` deletes the all clients in the FinBook.
+
+---
+
+### Copying a client's data : `copy`
+
+Copies the data of an existing client in the FinBook into your Computer's clipboard.
+
+Format: `copy INDEX`
+
+Example: `copy 1` with the sample data will result a copied output of:
+```
+Name: Alex Yeoh
+Phone: 87438807
+Email: alexyeoh@example.com
+Address: Blk 30 Geylang Street 29, #06-40
+Income: $1000
+Meeting date: 12 Nov 2022
+Tags: friends
+```
+* Press `Ctrl-V` to paste the copied text.
 
 ---
 
@@ -181,7 +254,20 @@ If your changes to the data file makes its format invalid, FinBook will discard 
 Imports data from a `JSON` or `CSV` file
 
 * `JSON` files must be saved by the latest version of FinBook
-* `CSV` files must be exported as Google CSV from Google Contacts
+* `CSV` files must be formatted correctly as follows:
+    * The first line of the file must contain these headers in any order:
+        * `name`
+        * `phone`
+        * `email`
+        * `address`
+        * `income`
+        * `meeting date`
+        * `tags`
+        * `risk`
+        * `plans`
+
+        * The data in each corresponding column must be valid
+            * `tags` must be separated by commas `,` without spaces (e.g. `colleagues,friends,neighbours`)
 
 Format: `import PATH`
 
@@ -194,23 +280,78 @@ Examples:
 * `import ./data.json` imports data from the file `data.json` which is located in the same directory as the FinBook executable
 * `import ../data.csv` imports data from the file `data.csv` which is located one level outside the directory of the FinBook executable
 
+---
+
+### Exporting data : `export`
+
+Exports data to a `CSV` file
+
+Format: `export PATH`
+
+* Exports data to the file at the specified `PATH`
+* `PATH` can be a relative or full path
+* `PATH` must end in `.csv`
+
+Examples:
+
+* `export ./data.csv` exports data to the file `data.csv` which is located in the same directory as the FinBook executable
+* `export ../data.csv` exports data to the file `data.csv` which is located one level outside the directory of the FinBook executable
+
+---
+
+### Locking the application : `lock`
+
+Locks the application. If a password has not been set, leave the password field empty to unlock the application.
+
+Format: `lock`
+
+---
+
+### Setting or updating the password : `password`
+
+Sets or updates the FinBook password
+
+Format: `password [old/OLDPASSWORD] new/NEWPASSWORD`
+
+* Sets or updates the password to the specified new password
+* No need to specify old password if setting the password for the first time
+* When updating the password, the specified old password must match the current password
+
+Examples:
+
+* `password new/foobar` sets the password to `foobar`, given that a password has not yet been set
+* `password old/foobar new/barfoo` updates the password to `barfoo`, given that the current password is `foobar`.
+
+---
+
+### Changing Light/Dark mode
+
+Toggle the theme of FinBook by clicking on the `sun` or `moon` icon on the top right of the application.
+
+* If icon is a `sun` FinBook is in Light mode.
+* If icon is a `moon` FinBook is in Dark mode.
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## FAQ
 
 **Q**: How do I transfer my data to another Computer?<br>
 **A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains
-the data of your previous FinBook home folder. Alternatively, you may use the `import` command.
+the data of your previous FinBook home folder. Alternatively, you may use the `export` and `import` commands.
 
 --------------------------------------------------------------------------------------------------------------------
 
 ## Command summary
 
-| Action               | Format, Examples                                                                                                                                                                                             |
-|----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Add**              | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS i/MONTHLY_INCOME m/UPCOMING_MEETING_DATES​` <br> e.g., `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 i/$100000 m/12 Jan 2022` |
-| **Delete**           | `delete INDEX`<br> e.g., `delete 3`                                                                                                                                                                          |
-| **Edit**             | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`                                                                                  |
-| **List**             | `list`                                                                                                                                                                                                       |
-| **Exit application** | `exit`                                                                                                                                                                                                       |
-| **Import**           | `import PATH`<br> e.g., `import ./data.json`                                                                                                                                                                 |
+| Action               | Format, Examples                                                                                                                                                                                                                                                                          |
+|----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Add**              | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS i/MONTHLY_INCOME m/UPCOMING_MEETING_DATES t/TAGS r/RISK_LEVEL pl/CURRENT_PLANS​` <br> e.g., `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 i/$100000 m/12 Jan 2022 t/VIPClient r/high pl/Prudential Health` |
+| **Delete**           | `delete INDEX` `delete INDEX1, INDEX2, …` `delete STARTINDEX - ENDINDEX` `delete all` <br> e.g., `delete 3` `delete 1, 2, 5` `delete 2-5`                                                                                                                                                 |
+| **Copy**             | `copy INDEX`   <br> e.g., `copy 1`                                                                                                                                                                                                                                                        |
+| **Edit**             | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG] [r/RISK_LEVEL] [pl/CURRENT_PLANS]​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`                                                                                                                              |
+| **List**             | `list`                                                                                                                                                                                                                                                                                    |
+| **Exit application** | `exit`                                                                                                                                                                                                                                                                                    |
+| **Import**           | `import PATH`<br> e.g., `import ./data.json`                                                                                                                                                                                                                                              |
+| **Export**           | `export PATH`<br> e.g., `export ./data.csv`                                                                                                                                                                                                                                               |
+| **Lock application** | `lock`                                                                                                                                                                                                                                                                                    |
+| **Password**         | `password [old/OLDPASSWORD] new/NEWPASSWORD`<br> e.g.,`password old/foobar new/barfoo`                                                                                                                                                                                                    |
