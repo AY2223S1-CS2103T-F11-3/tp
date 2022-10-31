@@ -31,8 +31,9 @@ title: FinBook User Guide
    &emsp; 4.3.3. [Importing data: `import`](#433-importing-data--import)<br>
    &emsp; 4.3.4. [Exporting data: `export`](#434-exporting-data--export)<br>
    &emsp; 4.3.5. [Copying a client's data: `copy`](#435-copying-a-clients-data--copy)<br>
-   &emsp; 4.3.6. [Changing Light/Dark mode](#436-changing-lightdark-mode)<br>
-   &emsp; 4.3.7. [Exiting the application: `exit`](#437-exiting-the-application--exit)<br>
+5. &emsp; 4.3.6. [Sorting clients: `sort`](#436-sorting-clients--sort)<br>
+   &emsp; 4.3.7. [Changing Light/Dark mode](#437-changing-lightdark-mode)<br>
+   &emsp; 4.3.8. [Exiting the application: `exit`](#438-exiting-the-application--exit)<br>
 5. [FAQ](#5-faq)<br>
 6. [Glossary](#6-glossary)<br>
 7. [Command Summary](#7-command-summary)<br>
@@ -175,6 +176,8 @@ Adds a client to the FinBook.
 
 Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS i/MONTHLY_INCOME [m/UPCOMING_MEETING_DATES] [t/TAGS r/RISK_LEVEL]
          [pl/CURRENT_PLANS] [note/ADDITIONAL_NOTES]​`
+
+* Value for `m/` can either be in the form of `m/dd Mmm yyyy` m/31 Oct 2022 OR `m/dd Mmm yyyy HH:mm`, m/31 Oct 2022 10:30.
 
 Examples:
 
@@ -447,21 +450,23 @@ Tags: friends
 
 * Press `Ctrl-V` to paste the copied text.
 
-### Sorting clients : `sort`
+### 4.3.6. Sorting clients : `sort`
 
-Sorts clients in the FinBook according to given parameter.
+Sorts clients in the FinBook according to the `name`, `income` or `meeting date` parameter.
 
-Format: `sort n/ or i/ or m/ ​`
+Format: `sort n/ OR i/ OR m/ ​`
 
-* Sorts clients in ascending order according to parameter.
 * At least one of the parameters must be provided.
+* Only one type of parameter can be provided at one time.
+* Sorts clients in ascending order according to the parameter.
 
 Examples:
 
 * `sort n/` Sorts clients in ascending order according to name.
+* `sort i/` Sorts clients in ascending order according to income.
 * `sort m/` Sorts clients according to their meeting dates in chronological order.
 
-### 4.3.6. Changing Light/Dark mode
+### 4.3.7. Changing Light/Dark mode
 
 Toggle the theme of FinBook by clicking on the `sun` or `moon` icon on the top right of the application.
 
@@ -475,7 +480,7 @@ Toggle the theme of FinBook by clicking on the `sun` or `moon` icon on the top r
 **:information_source: Your mode preference will be automatically saved**
 </div>
 
-### 4.3.7. Exiting the application : `exit`
+### 4.3.8. Exiting the application : `exit`
 
 Exits the application.
 
