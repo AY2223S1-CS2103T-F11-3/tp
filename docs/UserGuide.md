@@ -157,12 +157,14 @@ For example,
 ---
 
 ### 2.3.1. Prefix format
+
 **NAME** - `n/` : <br>
 Name of a client. <br>
 **Parameter restrictions**: Only standard English characters are allowed, and it should not be blank. <br>
 **Examples**:
- * Valid: `John Doe`, `Alex Yeoh`
- * Invalid: `Александр`, `语嫣`
+
+* Valid: `John Doe`, `Alex Yeoh`
+* Invalid: `Александр`, `语嫣`
 
 ---
 
@@ -171,6 +173,7 @@ Phone number of a client. <br>
 **Parameter restrictions**: Phone numbers should only contain numbers and be at least 3 digits long, and it should not
 be blank.<br>
 **Examples**:
+
 * Valid: `999`, `12345678`
 * Invalid: `10`, `+6512345678`
 
@@ -178,15 +181,20 @@ be blank.<br>
 
 **EMAIL** - `e/` : <br>
 Email of client. <br>
-**Parameter description**: Emails should be of the format local-part@domain and adhere to the following constraints: <br/> 
-1. The local-part should only contain alphanumeric characters and these special characters, excluding the parentheses, (+_.-). The local-part may not start or end with any special characters.<br/> 
-2. This is followed by a '@' and then a domain name. The domain name is made up of domain labels separated by periods. <br/>
-&emsp;The domain name must: <br/>
-&emsp;&emsp; - end with a domain label at least 2 characters long<br/>
-&emsp;&emsp; - have each domain label start and end with alphanumeric characters<br/>
-&emsp;&emsp; - have each domain label consist of alphanumeric characters, separated only by hyphens, if <br>
-&emsp;&emsp;   any.<br>
-**Examples**:
+**Parameter description**: Emails should be of the format local-part@domain and adhere to the following
+constraints: <br/>
+
+1. The local-part should only contain alphanumeric characters and these special characters, excluding the parentheses, (
+   +_.-). The local-part may not start or end with any special characters.<br/>
+2. This is followed by a '@' and then a domain name. The domain name is made up of domain labels separated by
+   periods. <br/>
+   &emsp;The domain name must: <br/>
+   &emsp;&emsp; - end with a domain label at least 2 characters long<br/>
+   &emsp;&emsp; - have each domain label start and end with alphanumeric characters<br/>
+   &emsp;&emsp; - have each domain label consist of alphanumeric characters, separated only by hyphens, if <br>
+   &emsp;&emsp; any.<br>
+   **Examples**:
+
 * Valid: `john@gmail.com`, `jo_doe@abc.com.sg`
 * Invalid: `john_@example.com`, `john@example_.com`
 
@@ -196,6 +204,7 @@ Email of client. <br>
 Address of client. <br>
 **Parameter restrictions**: Addresses can take any values, and it should not be blank.<br>
 **Examples**:
+
 * Valid: `Blk 123 @Flower Street #01-01`, `abc`
 
 ---
@@ -205,6 +214,7 @@ Income of client. <br>
 **Parameter restrictions**: Income should start with $ followed by numbers and should be at least 1 digit long, and it
 should not be blank. <br>
 **Examples**:
+
 * Valid: `$8250`, `$0`
 * Invalid: `$10k`, `5000`
 
@@ -214,6 +224,7 @@ should not be blank. <br>
 Date and time of meeting with client.<br>
 **Parameter restrictions**: Date should be in the form of dd MMM yyyy [HH:mm]. Meeting time is optional.<br>
 **Examples**:
+
 * Valid: `20 Nov 2022`, `05 Oct 2023 10:30`
 * Invalid: `13-Aug-2022`, `15 Jul 2023 16.30`
 
@@ -222,10 +233,12 @@ Date and time of meeting with client.<br>
 **MEETINGLOCATION** - `ml/` : <br>
 Location of meeting with client. <br>
 **Parameter restrictions**: <br>
+
 * Location can be in the form of either an address (for in-person meetings), or a link (for online meetings).
 * Addresses can take any values, and it should not be blank.
-  Links should be of the format protocol://host, and links compliant with the format will be automatically detected by Finbook, and the meeting will be automatically categorised as online.<br>
-**Examples**:
+  Links should be of the format protocol://host, and links compliant with the format will be automatically detected by
+  Finbook, and the meeting will be automatically categorised as online.<br>
+  **Examples**:
 * Valid: `13 Computing Drive`, `https://nus-sg.zoom.us/`
 
 ---
@@ -234,6 +247,7 @@ Location of meeting with client. <br>
 Tag of client. <br>
 **Parameter restrictions**: Tags names should be alphanumeric. <br>
 **Examples**:
+
 * Valid: `VIPClient`, `10`
 * Invalid: `VIP-Client`, `*`
 
@@ -243,6 +257,7 @@ Tag of client. <br>
 Risk level of client’s portfolio. <br>
 **Parameter restrictions**: Risk level can take any value. <br>
 **Examples**:
+
 * Valid: `High`, `abc`, `10`
 
 ---
@@ -251,6 +266,7 @@ Risk level of client’s portfolio. <br>
 Plans regarding client’s portfolio. <br>
 **Parameter restrictions**: Plan name can take any value. <br>
 **Examples**:
+
 * Valid: `NTUC Income Plan`, `OCBC Plan 2020`
 
 ---
@@ -259,6 +275,7 @@ Plans regarding client’s portfolio. <br>
 Additional notes to client’s portfolio. <br>
 **Parameter restrictions**: Notes can take any value. <br>
 **Examples**:
+
 * Valid: `Plans to save for retirement`, `Currently have COVID`
 
 [⬆ back to Table of Contents](#table-of-contents)
@@ -408,6 +425,9 @@ Examples:
 **:information_source: Notes:**
 
 * `remove` command will automatically view the updated portfolio of the edited client.
+* Any input tags, plans or notes that are not present on the client will be ignored. For example,
+  using `remove 1 t/friends` when the 1st client does not possess the `friends` tag is a valid command, and will simply
+  display the 1st client as it is currently.
 
 </div>
 

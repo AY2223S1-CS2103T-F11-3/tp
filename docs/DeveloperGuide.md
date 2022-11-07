@@ -179,7 +179,7 @@ How the parsing works:
 **
 API** : [`Model.java`](https://github.com/AY2223S1-CS2103T-F11-3/tp/blob/master/src/main/java/seedu/address/model/Model.java)
 
-<img src="images/UpdatedModelClassDiagramWithPortfolio.png" width="450" />
+<img src="images/UpdatedModelClassDiagramWithNotesAndMeeting.png" width="450" />
 
 
 The `Model` component,
@@ -272,6 +272,7 @@ Chose to use OpenCSV to read `CSV` files to avoid reinventing the wheel.
 #### Current Implementation
 
 The view command mainly relies on the following classes:
+
 * `Person`
 * `Model`
 * `Index`
@@ -280,21 +281,24 @@ The view command mainly relies on the following classes:
 * `CommandResult`
 
 1. The user executes the `view` command while providing an index of the client as an argument.
-2. `AddressBookParser#parseCommand` is called, which creates and returns a new `ViewCommandParser` that parses the 
+2. `AddressBookParser#parseCommand` is called, which creates and returns a new `ViewCommandParser` that parses the
    provided index.
 3. `ViewCommandParser#parse()` is called, which calls `ViewCommand#parse()` to parse the index of client.
 4. `ViewCommandParser` creates and returns a new `ViewCommand` with the index of client.
 5. `ViewCommand#execute()` is called.
-   1. `ViewCommand#execute()` will get the updated client list using `model#getFilteredPersonList()`.
-   2. `ViewCommand#execute()` will get the specific client using the index given as the parameter.
-   3. `ViewCommand#execute()` then calls `CommandResult` which calls the `Message` to return the success message after each successful execution.
+    1. `ViewCommand#execute()` will get the updated client list using `model#getFilteredPersonList()`.
+    2. `ViewCommand#execute()` will get the specific client using the index given as the parameter.
+    3. `ViewCommand#execute()` then calls `CommandResult` which calls the `Message` to return the success message after
+       each successful execution.
 
 Design considerations:
+
 1. View person and get portfolio of each client
-2. View portfolio of each client   
-- Option 1 is implemented because it was unnecessary to add a new list of clients containing on the portfolio. Since 
-is an existing method that already gets the updated Person list, hence, we have decided to get the portfolio
-of each client through this Person list as each client will have their own portfolio.
+2. View portfolio of each client
+
+- Option 1 is implemented because it was unnecessary to add a new list of clients containing on the portfolio. Since
+  is an existing method that already gets the updated Person list, hence, we have decided to get the portfolio
+  of each client through this Person list as each client will have their own portfolio.
 
 *{More to be added}*
 
